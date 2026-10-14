@@ -45,11 +45,19 @@ Run from the target project root.
    @.setup/CLAUDE.generic.md
    ```
 
-4. Block agent edits to the setup. Project `.claude/settings.json`:
+4. Allow the setup scripts and block agent edits to the setup. Project
+   `.claude/settings.json`:
 
    ```
-   { "permissions": { "deny": ["Edit(.setup/**)", "Write(.setup/**)"] } }
+   {
+     "permissions": {
+       "allow": ["Bash(.setup/scripts/*)"],
+       "deny": ["Edit(.setup/**)"]
+     }
+   }
    ```
+
+   An `Edit` rule covers every file-editing tool.
 
 5. Check out the submodule in CI: `actions/checkout` with `submodules: true`.
 
