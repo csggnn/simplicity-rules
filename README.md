@@ -30,7 +30,7 @@ Run from the target project root.
 1. Add the submodule:
 
    ```
-   git submodule add <setup-repo-url> .setup
+   git submodule add https://github.com/csggnn/simplicity-rules.git .setup
    ```
 
 2. Check tool versions:
