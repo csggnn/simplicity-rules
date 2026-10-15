@@ -1,73 +1,75 @@
 # simplicity-rules
 
-Tools and guidance for coding agents. It holds Claude Code guidance and minimum tool
-versions. A project consumes it as the git submodule `.setup/`, pinned to a commit.
+A Claude Code plugin. It holds skills, hooks and agents that act during and after code
+generation, and minimum tool versions. The current target is low cognitive complexity in
+generated Python code.
 
-The current target is low cognitive complexity in generated Python code. Changes to the
-setup are adopted on measured results: cognitive complexity, review effort and review
-findings on real features.
+Changes to the plugin are adopted on measured results: cognitive complexity, review effort
+and review findings on real features.
 
-## Test project
-
-The setup is tested on [csggnn/job-search-agent](https://github.com/csggnn/job-search-agent).
-[job-search-bench](https://github.com/csggnn/job-search-bench) runs the evaluation
-([spec](https://github.com/csggnn/job-search-agent/issues/84)).
-
-`main` is the champion setup. A candidate change is a short-lived branch of this repo. The
-bench evaluates it against `main` by implementing the same real feature in
-job-search-agent with each setup. An adopted candidate is merged to `main`. A rejected
-candidate is tagged `setup-rejected/<idea>` and its branch is deleted.
-
-## Target project requirements
-
-- Python code.
-- Claude Code as the coding agent, at the version in `versions.toml` or newer.
-
-## Integration
-
-Run from the target project root.
-
-1. Add the submodule:
-
-   ```
-   git submodule add https://github.com/csggnn/simplicity-rules.git .setup
-   ```
-
-2. Check tool versions:
-
-   ```
-   .setup/scripts/check-versions.sh
-   ```
-
-3. Import the generic rules. Add this line to the project `CLAUDE.md`, after the title:
-
-   ```
-   @.setup/CLAUDE.generic.md
-   ```
-
-4. Block agent edits to the setup. Project `.claude/settings.json`:
-
-   ```
-   { "permissions": { "deny": ["Edit(.setup/**)", "Write(.setup/**)"] } }
-   ```
-
-5. Check out the submodule in CI: `actions/checkout` with `submodules: true`.
-
-6. Commit `.gitmodules`, `.setup`, `CLAUDE.md` and `.claude/settings.json`.
-
-A fresh clone of the project needs `git submodule update --init`.
-
-### Update to a new setup commit
+## Layout
 
 ```
-git -C .setup fetch && git -C .setup checkout <sha>
-git add .setup
+.claude-plugin/plugin.json       plugin manifest
+.claude-plugin/marketplace.json  marketplace listing this plugin
+skills/<name>/SKILL.md           skills, invoked as /simplicity-rules:<name>
+hooks/hooks.json                 hooks
+agents/<name>.md                 subagents
+scripts/check-versions.sh        compares installed tools with versions.toml
+versions.toml                    minimum tool versions
 ```
 
-## Project layer
+`main` holds the manifest only. Skills, hooks and agents arrive through adopted candidates.
 
-The project keeps everything specific to it: its `CLAUDE.md` rules and invariants, lint
-configuration, CI workflows, skills, PR templates and permission settings.
+## Requirements
+
+- Claude Code at the version in `versions.toml` or newer. `scripts/check-versions.sh` checks it.
+- Python code in the target project.
+- Rootless podman for skills that run checkers in a container. The first run builds the
+  image and needs network access.
+
+## Use
+
+### Install and enable per project
+
+```
+claude plugin marketplace add csggnn/simplicity-rules
+claude plugin install simplicity-rules@simplicity-rules
+```
+
+Installing copies the plugin into `~/.claude/plugins/`. Enable it for one project in that
+project's `.claude/settings.local.json`:
+
+```
+{
+  "enabledPlugins": { "simplicity-rules@simplicity-rules": true }
+}
+```
+
+Update after a new `main`:
+
+```
+claude plugin marketplace update simplicity-rules
+claude plugin update simplicity-rules@simplicity-rules
+```
+
+### Load for one session
+
+```
+claude --plugin-dir <path-to-simplicity-rules>
+```
+
+Nothing is written to `~/.claude`. The plugin loads from the directory as it is on disk.
+
+## Evaluation
+
+The plugin is tested on [csggnn/job-search-agent](https://github.com/csggnn/job-search-agent).
+[job-search-bench](https://github.com/csggnn/job-search-bench) runs the evaluation.
+
+`main` is the champion. A candidate change is a short-lived branch of this repo. The bench
+implements the same real feature with each version of the plugin and compares the results.
+An adopted candidate is merged to `main`. A rejected candidate is tagged
+`setup-rejected/<idea>` and its branch is deleted.
 
 ## Development
 
