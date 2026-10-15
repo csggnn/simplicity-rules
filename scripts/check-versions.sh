@@ -9,6 +9,7 @@ status=0
 installed() {
     case "$1" in
         claude) claude --version ;;
+        uv) uv --version ;;
     esac </dev/null 2>/dev/null | grep -oE '[0-9]+(\.[0-9]+)+' | head -n1
 }
 
