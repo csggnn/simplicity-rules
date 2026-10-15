@@ -1,7 +1,10 @@
 # simplicity-rules
 
-## Cognitive complexity
+## Before committing
 
-A Python function that a change adds or modifies has a cognitive complexity of 15 or less.
-After writing or changing Python code, and before committing it, run the skill
-`simplicity-rules:cognitive-complexity` on the changed code.
+After writing or changing Python code, and before committing it, run these skills on the
+changed code, in this order:
+
+1. `simplicity-rules:design-review`: deep modules, information hiding, obvious code.
+2. `simplicity-rules:cognitive-complexity`: a Python function that a change adds or
+   modifies has a cognitive complexity of 15 or less.
