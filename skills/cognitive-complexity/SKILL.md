@@ -1,6 +1,6 @@
 ---
 name: cognitive-complexity
-description: Measure the cognitive complexity of the Python functions changed on the current branch and refactor each one above the limit.
+description: Measure the cognitive complexity of the Python functions added or modified in this session and refactor each one above the limit.
 ---
 
 Measure the cognitive complexity of changed Python code and bring each changed function to
@@ -12,19 +12,12 @@ A function scores 15 or less.
 
 # Files
 
-If the request names paths, measure those. Otherwise measure the Python files changed on
-the branch, committed or not:
-
-1. Resolve the default branch with `git symbolic-ref --short refs/remotes/origin/HEAD`. If
-   that fails, use the local branch `main`, or `master` when `main` does not exist.
-2. `git diff --name-only --diff-filter=d $(git merge-base HEAD <default-branch>) -- '*.py'`
-3. `git ls-files --others --exclude-standard -- '*.py'`
-
-If no Python file changed, report it and stop.
+If the request names paths, measure those. Otherwise measure the Python files added or
+modified in this session. If no Python file changed, report it and stop.
 
 # Measure
 
-Run from the project root:
+Run from the project root, as a single command:
 
 ```
 uvx complexipy==8.0.1 <files> --plain --sort desc --color no
@@ -33,8 +26,8 @@ uvx complexipy==8.0.1 <files> --plain --sort desc --color no
 Each output line is `<file> <function> <score>`. Exit status 1 means at least one function
 in the measured files scores above 15.
 
-The changed functions are the functions the branch adds or modifies, read from the diff.
-A function above 15 that the branch does not touch is out of scope. List it in the report.
+The changed functions are the functions added or modified in this session.
+A function above 15 that this session does not touch is out of scope. List it in the report.
 
 # Refactor
 
@@ -54,6 +47,6 @@ until each changed function scores 15 or less.
 
 # Report
 
-The default branch used, when step 1 ran. A table with one row per changed function: file, function, score before, score after.
+A table with one row per changed function: file, function, score before, score after.
 Then each out-of-scope function above 15, and each changed function that still scores above
 15 with the reason.
