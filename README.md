@@ -23,10 +23,11 @@ versions.toml                    minimum tool versions
 
 ## Requirements
 
-- Claude Code at the version in `versions.toml` or newer. `scripts/check-versions.sh` checks it.
+- Claude Code at the version in `versions.toml` or newer. `scripts/check-versions.sh` checks
+  the installed versions.
 - Python code in the target project.
-- Rootless podman for skills that run checkers in a container. The first run builds the
-  image and needs network access.
+- [uv](https://docs.astral.sh/uv/) at the version in `versions.toml` or newer. Skills run
+  checkers with `uvx` at pinned versions. The first run of a checker downloads it.
 
 ## Use
 
@@ -60,6 +61,12 @@ claude --plugin-dir <path-to-simplicity-rules>
 ```
 
 Nothing is written to `~/.claude`. The plugin loads from the directory as it is on disk.
+
+### Permissions
+
+Skills run checkers as `uvx <checker>==<version> ...`. Claude Code asks before each run
+unless the project or user settings allow it. A rule names the pinned version, e.g.
+`"allow": ["Bash(uvx complexipy==8.0.1:*)"]`.
 
 ## Evaluation
 
