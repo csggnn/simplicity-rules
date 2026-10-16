@@ -2,5 +2,5 @@
 # A project may pin a newer version. scripts/check-versions.sh compares installed
 # versions against these.
 [tools]
-claude = "2.1.296"
+claude = "2.1.300"
 uv = "0.13.1"

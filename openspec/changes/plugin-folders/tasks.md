@@ -38,8 +38,8 @@
 
 ## 4. Repository files
 
-- [x] 4.1 Verify `scripts/check-versions.sh` still reports `claude` and `uv` from the
-  repository root.
+- [x] 4.1 Set the `claude` minimum in `versions.toml` to 2.1.300. Verify
+  `scripts/check-versions.sh` reports `claude` and `uv` from the repository root.
 - [x] 4.2 Rewrite `README.md`: plugin catalog layout, states, the procedures to add a
   candidate, make a plugin the default, make it opt-in, archive it and delete it, the
   automatic and manual ways for a project to use the default, loading for one session,

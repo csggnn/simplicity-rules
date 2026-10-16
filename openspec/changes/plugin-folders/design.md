@@ -154,6 +154,11 @@ check would need `jq` and a TOML tool.
 install, session loading and permissions sections, updated for the catalog, and documents
 the catalog.
 
+### Minimum Claude Code version
+
+Two marketplace entries with one source were verified with Claude Code 2.1.300. The `claude`
+minimum in `versions.toml` is 2.1.300.
+
 ### Using the default in a project
 
 The README documents two ways for a project, such as job-search-agent:
