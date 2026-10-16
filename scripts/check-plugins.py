@@ -62,25 +62,33 @@ def check_default(default, states, errors):
         )
 
 
+def check_entry(name, entry, default, states, errors):
+    if not entry.get("description"):
+        errors.append(f"{name}: marketplace entry has no description")
+    if name == ALIAS:
+        expected = f"./plugins/{default}"
+    elif name in states:
+        expected = f"./plugins/{name}"
+    else:
+        errors.append(f"{name}: marketplace entry names no plugin")
+        return
+    if entry.get("source") != expected:
+        errors.append(
+            f"{name}: marketplace source is {entry.get('source')!r}, expected {expected!r}"
+        )
+    if name != ALIAS and states[name] not in OFFERED_STATES:
+        errors.append(f"{name}: state is {states[name]}, the marketplace offers it")
+
+
 def check_marketplace(default, states, errors):
     marketplace = json.loads((ROOT / ".claude-plugin" / "marketplace.json").read_text())
-    entries = {e["name"]: e for e in marketplace.get("plugins", [])}
+    listed = marketplace.get("plugins", [])
+    names = [e["name"] for e in listed]
+    for name in sorted({n for n in names if names.count(n) > 1}):
+        errors.append(f"{name}: marketplace lists this name more than once")
+    entries = {e["name"]: e for e in listed}
     for name, entry in entries.items():
-        if not entry.get("description"):
-            errors.append(f"{name}: marketplace entry has no description")
-        if name == ALIAS:
-            expected = f"./plugins/{default}"
-        elif name in states:
-            expected = f"./plugins/{name}"
-        else:
-            errors.append(f"{name}: marketplace entry names no plugin")
-            continue
-        if entry.get("source") != expected:
-            errors.append(
-                f"{name}: marketplace source is {entry.get('source')!r}, expected {expected!r}"
-            )
-        if name != ALIAS and states[name] not in OFFERED_STATES:
-            errors.append(f"{name}: state is {states[name]}, the marketplace offers it")
+        check_entry(name, entry, default, states, errors)
     for name, state in states.items():
         if state in OFFERED_STATES and name not in entries:
             errors.append(f"{name}: state is {state}, the marketplace omits it")

@@ -101,6 +101,7 @@ A repository check SHALL fail when:
 - the number of `default` plugins is not one,
 - the marketplace offers an `archived` plugin, or omits a `default`, `opt-in` or `candidate`
   plugin,
+- the marketplace lists a plugin name more than once,
 - the `simplicity-rules` entry does not install the `default` plugin,
 - a plugin folder lacks its manifest or its evaluation status,
 - the marketplace entry of an offered plugin has no description,
