@@ -26,6 +26,6 @@
 
 ## 4. Checks
 
-- [ ] 4.1 Run `python3 scripts/check-plugins.py`, `python3 -m unittest discover -s tests`,
+- [x] 4.1 Run `python3 scripts/check-plugins.py`, `python3 -m unittest discover -s tests`,
   `uvx pre-commit run --all-files`, `openspec validate --all`, `claude plugin validate .` and
   `claude plugin validate plugins/sr-v0`. Verify each passes.
