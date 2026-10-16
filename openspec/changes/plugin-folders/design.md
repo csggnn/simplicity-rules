@@ -95,8 +95,8 @@ from an `opt-in` plugin, and archived plugins are not listed there.
 
 ### The `simplicity-rules` marketplace entry follows the default
 
-The marketplace keeps its name, `simplicity-rules`. It lists every `default` and `opt-in`
-plugin under its folder name, and one more entry named `simplicity-rules` with
+The marketplace keeps its name, `simplicity-rules`. It lists every `default`, `opt-in`
+and `candidate` plugin under its folder name, and one more entry named `simplicity-rules` with
 `"strict": false` whose `source` is the default plugin's folder. A project that enables
 `simplicity-rules@simplicity-rules` follows the default. `main` already uses this marketplace
 and plugin name, so an existing installation keeps working.

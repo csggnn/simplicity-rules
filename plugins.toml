@@ -1,0 +1,6 @@
+# State of every plugin in plugins/. States: candidate, default, opt-in, archived.
+# Exactly one plugin has the state "default", and "default" below names it.
+default = "v0"
+
+[plugins.v0]
+state = "default"
