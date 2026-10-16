@@ -25,7 +25,7 @@ Each plugin SHALL have exactly one state: `candidate`, `default`, `opt-in` or `a
 Exactly one plugin SHALL have the state `default`.
 
 - `candidate`: under evaluation. Offered for installation.
-- `default`: the plugin a project uses unless it chooses another.
+- `default`: the plugin a project uses unless it chooses another. Offered for installation.
 - `opt-in`: kept for use on request. Offered for installation.
 - `archived`: deprecated and kept for reference. Not offered for installation.
 
@@ -89,7 +89,7 @@ a summary of each comparison's result, an assessment, and the decision with its 
 assessment states the cost and the benefit observed, the open questions and the next
 experiment. A plugin with no evaluation SHALL state that it has none.
 
-#### Scenario: Plugin without an evaluation
+#### Scenario: Reading an evaluation status
 - **WHEN** the user reads v0's evaluation status
 - **THEN** it states the state `default`, its goal and scope, and the comparisons that used it
   as the baseline
