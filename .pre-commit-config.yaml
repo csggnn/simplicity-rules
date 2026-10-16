@@ -34,3 +34,9 @@ repos:
         language: system
         pass_filenames: false
         files: ^(plugins\.toml|plugins/|\.claude-plugin/|scripts/check-plugins\.py)
+      - id: test-check-plugins
+        name: test check plugins
+        entry: python3 -B -m unittest discover -s tests
+        language: system
+        pass_filenames: false
+        files: ^(tests/|scripts/check-plugins\.py)

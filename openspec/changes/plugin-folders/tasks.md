@@ -18,13 +18,22 @@
 ## 2. Consistency check
 
 - [x] 2.1 Write `scripts/check-plugins.py` covering every failure in the spec's check
-  requirement. Verify it passes on the repository and fails, naming the plugin, when
-  `plugins.toml` sets v0 to `archived`, when the marketplace omits v0, when the marketplace
-  lists an archived plugin, when an offered plugin has no description, when the
-  `simplicity-rules` entry points at another folder, and when `EVALUATION.md` states another
-  state.
-- [x] 2.2 Add the check as a local hook in `.pre-commit-config.yaml`. Verify
-  `uvx pre-commit run --all-files` runs and passes it.
+  requirement, and `tests/test_check_plugins.py`. Verify
+  `python3 -m unittest discover -s tests` passes. The tests check that the script passes on
+  the repository and, on a copy of the repository with one fault applied, exits 1 with a
+  message naming the plugin for each fault: `plugins.toml` sets
+  v0 to `archived`, the marketplace omits v0, the marketplace lists a plugin that
+  `plugins.toml` records as `archived` and that has no folder, an offered plugin has no
+  description, the marketplace lists a name twice, the `simplicity-rules` entry points at
+  another folder, the `simplicity-rules` entry lacks `"strict": false`, and `EVALUATION.md`
+  states another state.
+- [x] 2.2 Add the check and its tests as local hooks in `.pre-commit-config.yaml`. Verify
+  `uvx pre-commit run --all-files` runs and passes both.
+
+- [x] 2.3 Extend `tests/test_check_plugins.py` to verify the check reports a violation line,
+  with no traceback and exit 1, on a copy of the repository where `EVALUATION.md` is empty, the marketplace is invalid JSON, a
+  manifest is invalid JSON, a marketplace entry has no name, a `plugins.toml` entry is not a
+  table, `plugins.toml` has no plugin tables, or the `plugins/` folder is missing.
 
 ## 3. Marketplace behavior
 
@@ -58,3 +67,5 @@
 
 - [x] 6.1 Run `uvx pre-commit run --all-files` and `openspec validate --all`. Verify both
   pass, and CI passes on the pull request.
+- [x] 6.2 Re-run the verifications of tasks 1.1, 1.4, 3.1, 3.2 and 4.1 and the unit tests of
+  tasks 2.1 and 2.3 on the final branch. Verify each gives the result its task states.

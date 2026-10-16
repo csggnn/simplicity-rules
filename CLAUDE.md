@@ -23,7 +23,9 @@ plugin's state.
 
 ```
 python3 scripts/check-plugins.py
+python3 -m unittest discover -s tests
 uvx pre-commit run --all-files
 ```
 
-`scripts/check-plugins.py` runs as a pre-commit hook and in CI.
+`scripts/check-plugins.py` and its tests run as pre-commit hooks and in CI. A new rule in the
+check needs a case in `tests/test_check_plugins.py`.

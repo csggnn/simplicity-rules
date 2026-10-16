@@ -143,6 +143,8 @@ needs Python 3.11 or newer for `tomllib`, and stops with a message on an older i
 file it cannot parse is reported as a violation.
 It runs as a local pre-commit hook, so the existing CI step `pre-commit run --all-files` runs
 it with no new CI step. It prints one line per violation and exits 1 on any. Ruff lints it.
+`tests/test_check_plugins.py` uses `unittest` and runs as a second local hook. It applies one
+fault per case to a copy of the catalog files and asserts the message and exit status.
 
 Alternative: a shell script. Rejected because shell has no TOML or JSON parser, and the
 check would need `jq` and a TOML tool.

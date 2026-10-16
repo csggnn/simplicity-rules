@@ -194,7 +194,8 @@ npx --yes @fission-ai/openspec@1.14.2 validate --all --no-interactive
 CI (`.github/workflows/ci.yml`) runs both on pushes to `main` and on pull requests. The hooks
 check whitespace, YAML, TOML and JSON, lint shell scripts with shellcheck, lint and format
 Python with Ruff (`ruff.toml`), scan for secrets with gitleaks, audit workflows with zizmor
-and check the plugin catalog with `scripts/check-plugins.py`.
+check the plugin catalog with `scripts/check-plugins.py` and run its tests in `tests/`
+(`python3 -m unittest discover -s tests`).
 
 - Dependabot updates the GitHub Actions weekly, after a 7-day cooldown.
 - CodeRabbit reviews pull requests (`.coderabbit.yaml`).
