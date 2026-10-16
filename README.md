@@ -71,7 +71,8 @@ configuration, CI workflows, skills, PR templates and permission settings.
 
 ## Development
 
-Requires [uv](https://docs.astral.sh/uv/). Install the git hooks once:
+Requires [uv](https://docs.astral.sh/uv/) and [Node.js](https://nodejs.org/), which provides
+`npx`. Install the git hooks once:
 
 ```
 uvx pre-commit install
@@ -81,7 +82,7 @@ Run all local checks:
 
 ```
 uvx pre-commit run --all-files
-openspec validate --all
+npx --yes @fission-ai/openspec@1.14.2 validate --all --no-interactive
 ```
 
 CI (`.github/workflows/ci.yml`) runs both on pushes to `main` and on pull requests. The hooks
