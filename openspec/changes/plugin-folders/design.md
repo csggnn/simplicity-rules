@@ -43,8 +43,8 @@ See proposal.md for motivation and specs/plugin-catalog/spec.md for the required
 - A bench run that names a plugin folder at a commit loads the same plugin content on every
   run.
 - Adding, promoting or archiving a plugin changes no other plugin's folder.
-- The consistency check runs offline, with no dependency beyond what CI and pre-commit
-  already install.
+- The consistency check runs offline, with no dependency beyond Python 3.11 or newer and what
+  CI and pre-commit already install.
 
 **Non-Goals:**
 - Version numbers per plugin. A plugin is identified by its folder and the repository commit.
@@ -135,7 +135,9 @@ them as data. A reader sees them in the marketplace listing and in `EVALUATION.m
 
 ### Consistency check as a pre-commit hook
 
-`scripts/check-plugins.py` uses the Python standard library (`tomllib`, `json`, `pathlib`).
+`scripts/check-plugins.py` uses the Python standard library (`tomllib`, `json`, `pathlib`). It
+needs Python 3.11 or newer for `tomllib`, and stops with a message on an older interpreter. A
+file it cannot parse is reported as a violation.
 It runs as a local pre-commit hook, so the existing CI step `pre-commit run --all-files` runs
 it with no new CI step. It prints one line per violation and exits 1 on any. Ruff lints it.
 
