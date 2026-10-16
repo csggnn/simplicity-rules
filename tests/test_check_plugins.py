@@ -38,9 +38,18 @@ def omit_sr_v0(root):
 
 def list_archived_plugin_without_folder(root):
     with (root / "plugins.toml").open("a") as file:
-        file.write('\n[plugins.old]\nstate = "archived"\n')
-    entry = {"name": "old", "source": "./plugins/old", "description": "x"}
+        file.write('\n[plugins.sr-old]\nstate = "archived"\n')
+    entry = {"name": "sr-old", "source": "./plugins/sr-old", "description": "x"}
     edit_marketplace(root, lambda plugins: plugins.append(entry))
+
+
+def add_plugin_without_prefix(root):
+    with (root / "plugins.toml").open("a") as file:
+        file.write('\n[plugins.old]\nstate = "archived"\n')
+    folder = root / "plugins" / "old"
+    (folder / ".claude-plugin").mkdir(parents=True)
+    (folder / ".claude-plugin" / "plugin.json").write_text('{"name": "old"}')
+    (folder / "EVALUATION.md").write_text("State: archived\n")
 
 
 def drop_description(root):
@@ -99,7 +108,11 @@ FAULTS = {
     "marketplace omits sr-v0": (omit_sr_v0, "sr-v0: state is default, the marketplace omits it"),
     "archived plugin listed, no folder": (
         list_archived_plugin_without_folder,
-        "old: state names no folder",
+        "sr-old: state names no folder",
+    ),
+    "plugin name without prefix": (
+        add_plugin_without_prefix,
+        "old: plugin name does not start with 'sr-'",
     ),
     "offered plugin without description": (
         drop_description,
