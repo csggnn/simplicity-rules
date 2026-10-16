@@ -23,6 +23,10 @@ versions.toml                     minimum tool versions
 
 ## Plugins
 
+A plugin's name starts with `sr-`. The folder, the manifest `name`, the marketplace entry and
+the `plugins.toml` table use that name. Claude Code shows a plugin's skills as
+`<name>:<skill>`, e.g. `sr-v0:<skill>`.
+
 `plugins.toml` records the state of every plugin. The marketplace lists each offered plugin
 with a one-line goal and scope. `plugins/<name>/EVALUATION.md` holds the state, goal, scope,
 comparisons, assessment and decision of a plugin.
@@ -83,7 +87,7 @@ project's `.claude/settings.local.json`:
 ```
 
 To use a specific plugin and keep it when the default changes, install and enable
-`<name>@simplicity-rules`, for example `v0@simplicity-rules`. Enable either
+`<name>@simplicity-rules`, for example `sr-v0@simplicity-rules`. Enable either
 `simplicity-rules@simplicity-rules` or a named plugin, not both, so the same plugin does not
 load twice.
 
@@ -124,8 +128,8 @@ claude plugin validate .
 
 ### Add a candidate
 
-1. Create `plugins/<name>/` with `.claude-plugin/plugin.json` (`"name": "<name>"`) and the
-   plugin content.
+1. Choose a `<name>` that starts with `sr-`. Create `plugins/<name>/` with
+   `.claude-plugin/plugin.json` (`"name": "<name>"`) and the plugin content.
 2. Create `plugins/<name>/EVALUATION.md` starting with `State: candidate`, with the sections
    Goal and scope, Comparisons, Assessment and Decision.
 3. Add `[plugins.<name>]` with `state = "candidate"` to `plugins.toml`.

@@ -17,6 +17,7 @@ ROOT = Path(__file__).resolve().parent.parent
 STATES = {"candidate", "default", "opt-in", "archived"}
 OFFERED_STATES = STATES - {"archived"}
 ALIAS = "simplicity-rules"
+PREFIX = "sr-"
 
 
 def read(path, parse, errors):
@@ -39,12 +40,19 @@ def load_states(errors):
     return data.get("default"), states
 
 
+def check_prefix(names, errors):
+    for name in sorted(names):
+        if not name.startswith(PREFIX):
+            errors.append(f"{name}: plugin name does not start with {PREFIX!r}")
+
+
 def check_folders(states, errors):
     plugins = ROOT / "plugins"
+    folders = {p.name for p in plugins.iterdir() if p.is_dir()} if plugins.is_dir() else set()
+    check_prefix(folders | states.keys(), errors)
     if not plugins.is_dir():
         errors.append("plugins: folder is missing")
         return
-    folders = {p.name for p in plugins.iterdir() if p.is_dir()}
     for name in sorted(folders - states.keys()):
         errors.append(f"{name}: folder has no state in plugins.toml")
     for name in sorted(states.keys() - folders):

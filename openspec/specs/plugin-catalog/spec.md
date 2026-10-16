@@ -13,8 +13,8 @@ folder SHALL load with `claude --plugin-dir <folder>`. Several plugin folders SH
 together in one session. Loading a plugin SHALL NOT require a branch checkout.
 
 #### Scenario: Load one plugin for a session
-- **WHEN** the user runs `claude --plugin-dir <repository>/plugins/v0`
-- **THEN** the session loads the v0 plugin
+- **WHEN** the user runs `claude --plugin-dir <repository>/plugins/sr-v0`
+- **THEN** the session loads the sr-v0 plugin
 
 #### Scenario: Load two plugins together
 - **WHEN** the user passes the folders of two plugins with two `--plugin-dir` options
@@ -31,7 +31,7 @@ Exactly one plugin SHALL have the state `default`.
 
 #### Scenario: Initial states
 - **WHEN** this change is applied
-- **THEN** v0 is the only plugin, and its state is `default`
+- **THEN** sr-v0 is the only plugin, and its state is `default`
 
 ### Requirement: The marketplace offers every plugin that is not archived
 Installing the repository's marketplace SHALL offer, by name, every plugin whose state is
@@ -40,7 +40,7 @@ offer an entry named `simplicity-rules` that installs the plugin whose state is 
 
 #### Scenario: Marketplace listing
 - **WHEN** the user adds the marketplace and lists its plugins
-- **THEN** the list holds `simplicity-rules` and `v0`
+- **THEN** the list holds `simplicity-rules` and `sr-v0`
 
 #### Scenario: Candidate offered
 - **WHEN** a plugin has the state `candidate`
@@ -53,13 +53,14 @@ A project that enables `simplicity-rules@simplicity-rules` SHALL get the plugin 
 enables a plugin by its own name SHALL keep that plugin when the default changes.
 
 #### Scenario: Default changes
-- **WHEN** a project enables `simplicity-rules@simplicity-rules`, the default changes from v0
-  to another plugin, and the user updates the marketplace and the plugin
+- **WHEN** a project enables `simplicity-rules@simplicity-rules`, the default changes from
+  sr-v0 to another plugin, and the user updates the marketplace and the plugin
 - **THEN** the project loads the new default plugin
 
 #### Scenario: Named plugin
-- **WHEN** a project enables `v0@simplicity-rules` and the default changes to another plugin
-- **THEN** the project keeps loading v0
+- **WHEN** a project enables `sr-v0@simplicity-rules` and the default changes to another
+  plugin
+- **THEN** the project keeps loading sr-v0
 
 ### Requirement: State changes follow documented procedures
 The repository documentation SHALL give the steps to add a candidate, to make a plugin the
@@ -90,7 +91,7 @@ assessment states the cost and the benefit observed, the open questions and the 
 experiment. A plugin with no evaluation SHALL state that it has none.
 
 #### Scenario: Reading an evaluation status
-- **WHEN** the user reads v0's evaluation status
+- **WHEN** the user reads sr-v0's evaluation status
 - **THEN** it states the state `default`, its goal and scope, and the comparisons that used it
   as the baseline
 
@@ -105,6 +106,8 @@ A repository check SHALL fail when:
 - the recorded default plugin does not have the state `default`,
 - the `simplicity-rules` entry does not install the `default` plugin,
 - a plugin folder lacks its manifest or its evaluation status,
+- a plugin's manifest name differs from its folder name,
+- a plugin's name does not start with `sr-`,
 - the marketplace entry of an offered plugin has no description,
 - a plugin's evaluation status states a different state than the one recorded.
 
@@ -117,3 +120,16 @@ CI SHALL run the check on pull requests and on pushes to the default branch.
 #### Scenario: Consistent repository
 - **WHEN** the states, the marketplace, the folders and the evaluation statuses agree
 - **THEN** the check passes
+
+### Requirement: Plugin names carry the sr- prefix
+The name of every plugin in the catalog SHALL start with `sr-`. A plugin's folder name and
+its manifest name SHALL be equal. The marketplace SHALL offer a plugin under that name. The
+entry `simplicity-rules` SHALL keep its name.
+
+#### Scenario: Skill namespace shows the catalog
+- **WHEN** a session loads the plugin `sr-v0` and the plugin holds a skill `example`
+- **THEN** the skill is named `sr-v0:example`
+
+#### Scenario: Plugin without the prefix
+- **WHEN** a plugin folder is named `old`
+- **THEN** the check fails and names `old`

@@ -28,26 +28,35 @@ def replace_in(root, relative, old, new):
     path.write_text(path.read_text().replace(old, new))
 
 
-def archive_v0(root):
+def archive_sr_v0(root):
     replace_in(root, "plugins.toml", 'state = "default"', 'state = "archived"')
 
 
-def omit_v0(root):
+def omit_sr_v0(root):
     edit_marketplace(root, lambda plugins: plugins.pop(1))
 
 
 def list_archived_plugin_without_folder(root):
     with (root / "plugins.toml").open("a") as file:
-        file.write('\n[plugins.old]\nstate = "archived"\n')
-    entry = {"name": "old", "source": "./plugins/old", "description": "x"}
+        file.write('\n[plugins.sr-old]\nstate = "archived"\n')
+    entry = {"name": "sr-old", "source": "./plugins/sr-old", "description": "x"}
     edit_marketplace(root, lambda plugins: plugins.append(entry))
+
+
+def add_plugin_without_prefix(root):
+    with (root / "plugins.toml").open("a") as file:
+        file.write('\n[plugins.old]\nstate = "archived"\n')
+    folder = root / "plugins" / "old"
+    (folder / ".claude-plugin").mkdir(parents=True)
+    (folder / ".claude-plugin" / "plugin.json").write_text('{"name": "old"}')
+    (folder / "EVALUATION.md").write_text("State: archived\n")
 
 
 def drop_description(root):
     edit_marketplace(root, lambda plugins: plugins[1].pop("description"))
 
 
-def duplicate_v0(root):
+def duplicate_sr_v0(root):
     edit_marketplace(root, lambda plugins: plugins.append(dict(plugins[1])))
 
 
@@ -60,11 +69,11 @@ def drop_strict(root):
 
 
 def change_evaluation_state(root):
-    replace_in(root, "plugins/v0/EVALUATION.md", "State: default", "State: opt-in")
+    replace_in(root, "plugins/sr-v0/EVALUATION.md", "State: default", "State: opt-in")
 
 
 def empty_evaluation(root):
-    (root / "plugins/v0/EVALUATION.md").write_text("")
+    (root / "plugins/sr-v0/EVALUATION.md").write_text("")
 
 
 def break_marketplace_json(root):
@@ -72,7 +81,7 @@ def break_marketplace_json(root):
 
 
 def break_manifest_json(root):
-    (root / "plugins/v0/.claude-plugin/plugin.json").write_text("{")
+    (root / "plugins/sr-v0/.claude-plugin/plugin.json").write_text("{")
 
 
 def add_unnamed_entry(root):
@@ -80,11 +89,11 @@ def add_unnamed_entry(root):
 
 
 def make_entry_not_a_table(root):
-    (root / "plugins.toml").write_text('default = "v0"\nplugins.v0 = "default"\n')
+    (root / "plugins.toml").write_text('default = "sr-v0"\nplugins.sr-v0 = "default"\n')
 
 
 def drop_plugin_tables(root):
-    (root / "plugins.toml").write_text('default = "v0"\n')
+    (root / "plugins.toml").write_text('default = "sr-v0"\n')
 
 
 def drop_plugins_folder(root):
@@ -93,19 +102,23 @@ def drop_plugins_folder(root):
 
 FAULTS = {
     "default plugin archived": (
-        archive_v0,
-        "v0: recorded as the default but its state is archived",
+        archive_sr_v0,
+        "sr-v0: recorded as the default but its state is archived",
     ),
-    "marketplace omits v0": (omit_v0, "v0: state is default, the marketplace omits it"),
+    "marketplace omits sr-v0": (omit_sr_v0, "sr-v0: state is default, the marketplace omits it"),
     "archived plugin listed, no folder": (
         list_archived_plugin_without_folder,
-        "old: state names no folder",
+        "sr-old: state names no folder",
+    ),
+    "plugin name without prefix": (
+        add_plugin_without_prefix,
+        "old: plugin name does not start with 'sr-'",
     ),
     "offered plugin without description": (
         drop_description,
-        "v0: marketplace entry has no description",
+        "sr-v0: marketplace entry has no description",
     ),
-    "name listed twice": (duplicate_v0, "v0: marketplace lists this name more than once"),
+    "name listed twice": (duplicate_sr_v0, "sr-v0: marketplace lists this name more than once"),
     "alias points at another folder": (
         point_alias_elsewhere,
         "simplicity-rules: marketplace source is",
@@ -120,7 +133,7 @@ FAULTS = {
     "manifest is invalid JSON": (break_manifest_json, "plugin.json: cannot read"),
     "entry without a name": (add_unnamed_entry, "marketplace entry without a name"),
     "plugins.toml entry is not a table": (make_entry_not_a_table, "is not one of"),
-    "plugins.toml has no plugin tables": (drop_plugin_tables, "default 'v0' names no plugin"),
+    "plugins.toml has no plugin tables": (drop_plugin_tables, "default 'sr-v0' names no plugin"),
     "plugins folder missing": (drop_plugins_folder, "plugins: folder is missing"),
 }
 

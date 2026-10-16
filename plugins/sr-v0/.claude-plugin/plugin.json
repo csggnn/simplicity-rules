@@ -1,5 +1,5 @@
 {
-  "name": "v0",
+  "name": "sr-v0",
   "description": "Baseline with no skills, hooks or agents. Any task, any language.",
   "author": { "name": "csggnn" },
   "repository": "https://github.com/csggnn/simplicity-rules",
