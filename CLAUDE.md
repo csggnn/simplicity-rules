@@ -8,12 +8,15 @@ plugin's state.
 - Each plugin is a folder `plugins/<name>/` with `.claude-plugin/plugin.json` (`"name"` equals
   the folder name), `EVALUATION.md` and the plugin content.
 - `plugins.toml` records the state of every plugin and the default. Change a state there.
-- A state change edits four places together: `plugins.toml`, the first line of the plugin's
-  `EVALUATION.md`, the plugin's entry in `.claude-plugin/marketplace.json` and, for the
-  default, the `simplicity-rules` entry in `.claude-plugin/marketplace.json`.
-- Offered plugins (`default`, `opt-in`, `candidate`) have a marketplace entry with a one-line
-  `description` of the goal and scope. `archived` plugins have none.
-- A change to one plugin does not edit another plugin's folder.
+- A plugin has a marketplace entry named after its folder when its state is `candidate`,
+  `default` or `opt-in`, and none when it is `archived`. Offered plugins have a one-line
+  `description` of the goal and scope.
+- A state change edits together: the state in `plugins.toml`, the first line and the Decision
+  section of the plugin's `EVALUATION.md`, and the plugin's marketplace entry. A new default
+  also edits `default` in `plugins.toml` and the `simplicity-rules` marketplace entry, which
+  keeps `"strict": false`. README.md lists the steps.
+- A change to one plugin does not edit the manifest or content of another plugin. A new
+  default also edits the `EVALUATION.md` of the plugin it replaces.
 - `versions.toml` and `scripts/check-versions.sh` are shared by all plugins.
 
 ## Check

@@ -42,7 +42,8 @@ See proposal.md for motivation and specs/plugin-catalog/spec.md for the required
 - A project that enables `simplicity-rules@simplicity-rules` keeps working after this change.
 - A bench run that names a plugin folder at a commit loads the same plugin content on every
   run.
-- Adding, promoting or archiving a plugin changes no other plugin's folder.
+- Adding, promoting or archiving a plugin changes no other plugin's manifest or content. The
+  `EVALUATION.md` of a replaced default changes, because it records the state.
 - The consistency check runs offline, with no dependency beyond Python 3.11 or newer and what
   CI and pre-commit already install.
 
@@ -123,8 +124,10 @@ Assessment (cost and benefit observed, open questions, next experiment), Decisio
 and date). The check compares the first line with `plugins.toml`.
 
 The marketplace entry `description` is a one-line summary of the Goal and scope section, so
-the user sees it when choosing a plugin. The `description` is the only copy. The check
-requires it to be non-empty and does not compare it with `EVALUATION.md`.
+the user sees it when choosing a plugin. It is the only copy of the summary in the catalog
+files the check reads. The README does not repeat it. A plugin's manifest `description` is the
+plugin's own metadata. The check requires the marketplace `description` to be non-empty and
+does not compare it with `EVALUATION.md` or the manifest.
 
 The Assessment of cc-review, added by a later change, reads: the plugin increases effort,
 showed limited qualitative improvement on a simple task, and awaits an experiment on a more
@@ -177,9 +180,9 @@ and the check command.
 
 - [A project enables both `simplicity-rules@simplicity-rules` and the default plugin by name,
   and loads it twice] → The README states to enable one of them.
-- [A later Claude Code version rejects two entries with the same source] → The check and the
-  README test the marketplace with `claude plugin validate .`. The fallback is the manual
-  procedure.
+- [A later Claude Code version rejects two entries with the same source] → The README
+  procedures end with `claude plugin validate .`. The check requires `"strict": false` on the
+  `simplicity-rules` entry. The fallback is the manual procedure.
 - [job-search-bench passes `--plugin-dir <clone>` for a commit after this change, and the
   clone root holds no plugin manifest] → The bench passes `<clone>/plugins/<name>`. That
   change is made in job-search-bench. Earlier commits keep the root layout.

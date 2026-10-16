@@ -23,11 +23,9 @@ versions.toml                     minimum tool versions
 
 ## Plugins
 
-| Plugin | State | Goal and scope |
-| -- | -- | -- |
-| `v0` | default | Baseline with no skills, hooks or agents. Any task, any language. |
-
-Each plugin states its state, goal, scope and evaluation results in its `EVALUATION.md`.
+`plugins.toml` records the state of every plugin. The marketplace lists each offered plugin
+with a one-line goal and scope. `plugins/<name>/EVALUATION.md` holds the state, goal, scope,
+comparisons, assessment and decision of a plugin.
 
 ### States
 
@@ -106,7 +104,23 @@ unless the project or user settings allow it. A rule names the pinned version, e
 
 ## Change a plugin's state
 
-Each procedure ends with `python3 scripts/check-plugins.py`, which CI also runs.
+A plugin has a marketplace entry named after its folder when its state is `candidate`,
+`default` or `opt-in`, and none when it is `archived`. A state change edits together:
+
+- the state in `plugins.toml`,
+- the first line of the plugin's `EVALUATION.md`, and the date and decision in its Decision
+  section,
+- the plugin's marketplace entry, added or removed as above,
+- for a new default: `default` in `plugins.toml` and the `simplicity-rules` marketplace entry.
+
+Each procedure ends with:
+
+```
+python3 scripts/check-plugins.py
+claude plugin validate .
+```
+
+`scripts/check-plugins.py` also runs in pre-commit and CI.
 
 ### Add a candidate
 
@@ -120,30 +134,35 @@ Each procedure ends with `python3 scripts/check-plugins.py`, which CI also runs.
 
 ### Make a plugin the default
 
-1. Set `default = "<name>"` in `plugins.toml`, set the state of `<name>` to `default` and set
+1. In `plugins.toml`, set `default = "<name>"`, set the state of `<name>` to `default` and set
    the previous default to `opt-in` or `archived`.
-2. Change the first line of both `EVALUATION.md` files to match and record the decision and
-   date in the new default's Decision section.
-3. Point the `simplicity-rules` marketplace entry at `./plugins/<name>` and update its
-   `description`.
-4. Remove the previous default's marketplace entry if it is now `archived`.
+2. Update the first line and the Decision section of both `EVALUATION.md` files.
+3. If `<name>` was `archived`, add its marketplace entry. If the previous default is now
+   `archived`, remove its marketplace entry.
+4. In the `simplicity-rules` marketplace entry, set `source` to `./plugins/<name>`, update the
+   `description`, and keep `"strict": false`. The entry shares its source with the named entry.
 
 ### Make a plugin opt-in
 
-Set its state to `opt-in` in `plugins.toml`, change the first line of its `EVALUATION.md` to
-`State: opt-in` and record the decision and date.
+The plugin must not be the default. To demote the default, make another plugin the default
+with the procedure above, which sets the previous default to `opt-in`.
+
+1. Set the state to `opt-in` in `plugins.toml`.
+2. Update the first line and the Decision section of its `EVALUATION.md`.
+3. If the plugin was `archived`, add its marketplace entry.
 
 ### Archive a plugin
 
-Set its state to `archived` in `plugins.toml`, change the first line of its `EVALUATION.md`
-to `State: archived`, record the decision and date, and remove its marketplace entry. The
-folder stays in `plugins/`.
+The plugin must not be the default.
+
+1. Set the state to `archived` in `plugins.toml`.
+2. Update the first line and the Decision section of its `EVALUATION.md`.
+3. Remove its marketplace entry. The folder stays in `plugins/`.
 
 ### Delete a plugin
 
-Remove `plugins/<name>/`, its `[plugins.<name>]` table and its marketplace entry. The plugin
-stays recoverable from git history. A default plugin cannot be deleted before another plugin
-becomes the default.
+The plugin must not be the default. Remove `plugins/<name>/`, its `[plugins.<name>]` table and
+its marketplace entry. The plugin stays recoverable from git history.
 
 ## Evaluation
 
@@ -158,8 +177,8 @@ deleted.
 
 ## Development
 
-Requires [uv](https://docs.astral.sh/uv/) and [Node.js](https://nodejs.org/), which provides
-`npx`. Install the git hooks once:
+Requires [uv](https://docs.astral.sh/uv/), [Node.js](https://nodejs.org/), which provides
+`npx`, and Python 3.11 or newer, which runs `scripts/check-plugins.py`. Install the git hooks once:
 
 ```
 uvx pre-commit install
@@ -174,7 +193,8 @@ npx --yes @fission-ai/openspec@1.14.2 validate --all --no-interactive
 
 CI (`.github/workflows/ci.yml`) runs both on pushes to `main` and on pull requests. The hooks
 check whitespace, YAML, TOML and JSON, lint shell scripts with shellcheck, lint and format
-Python with Ruff (`ruff.toml`), scan for secrets with gitleaks and audit workflows with zizmor.
+Python with Ruff (`ruff.toml`), scan for secrets with gitleaks, audit workflows with zizmor
+and check the plugin catalog with `scripts/check-plugins.py`.
 
 - Dependabot updates the GitHub Actions weekly, after a 7-day cooldown.
 - CodeRabbit reviews pull requests (`.coderabbit.yaml`).
