@@ -69,6 +69,30 @@ git add .setup
 The project keeps everything specific to it: its `CLAUDE.md` rules and invariants, lint
 configuration, CI workflows, skills, PR templates and permission settings.
 
+## Development
+
+Requires [uv](https://docs.astral.sh/uv/) and [Node.js](https://nodejs.org/), which provides
+`npx`. Install the git hooks once:
+
+```
+uvx pre-commit install
+```
+
+Run all local checks:
+
+```
+uvx pre-commit run --all-files
+npx --yes @fission-ai/openspec@1.14.2 validate --all --no-interactive
+```
+
+CI (`.github/workflows/ci.yml`) runs both on pushes to `main` and on pull requests. The hooks
+check whitespace, YAML, TOML and JSON, lint shell scripts with shellcheck, lint and format
+Python with Ruff (`ruff.toml`), scan for secrets with gitleaks and audit workflows with zizmor.
+
+- Dependabot updates the GitHub Actions weekly, after a 7-day cooldown.
+- CodeRabbit reviews pull requests (`.coderabbit.yaml`).
+- OpenSpec changes and specs live in `openspec/`.
+
 ## License
 
 MIT
