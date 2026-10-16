@@ -28,3 +28,7 @@ jobs:
 
       - name: Run pre-commit hooks
         run: uvx pre-commit@4.7.0 run --all-files --show-diff-on-failure
+
+      - name: Validate OpenSpec changes and specs
+        if: ${{ !cancelled() }}
+        run: npx --yes @fission-ai/openspec@1.14.2 validate --all --no-interactive
