@@ -3,3 +3,4 @@
 # versions against these.
 [tools]
 claude = "2.1.296"
+uv = "0.13.1"
