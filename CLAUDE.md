@@ -7,6 +7,8 @@ plugin's state.
 
 - Each plugin is a folder `plugins/<name>/` with `.claude-plugin/plugin.json` (`"name"` equals
   the folder name), `EVALUATION.md` and the plugin content.
+- A plugin's `<name>` starts with `sr-`, e.g. `sr-v0`. Claude Code namespaces skills with the
+  manifest `name`.
 - `plugins.toml` records the state of every plugin and the default. Change a state there.
 - A plugin has a marketplace entry named after its folder when its state is `candidate`,
   `default` or `opt-in`, and none when it is `archived`. Offered plugins have a one-line
