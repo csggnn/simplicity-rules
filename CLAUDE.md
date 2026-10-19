@@ -9,6 +9,9 @@ plugin's state.
   the folder name), `EVALUATION.md` and the plugin content.
 - A plugin's `<name>` starts with `sr-`, e.g. `sr-v0`. Claude Code namespaces skills with the
   manifest `name`.
+- A plugin's content names the plugin's own skills `<name>:<skill>`, always including the
+  namespace prefix `<name>`. Claude Code uses this name whether the plugin is installed under
+  its own entry, installed as the default or loaded with `--plugin-dir`.
 - `plugins.toml` records the state of every plugin and the default. Change a state there.
 - A plugin has a marketplace entry named after its folder when its state is `candidate`,
   `default` or `opt-in`, and none when it is `archived`. Offered plugins have a one-line

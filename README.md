@@ -129,7 +129,9 @@ claude plugin validate .
 ### Add a candidate
 
 1. Choose a `<name>` that starts with `sr-`. Create `plugins/<name>/` with
-   `.claude-plugin/plugin.json` (`"name": "<name>"`) and the plugin content.
+   `.claude-plugin/plugin.json` (`"name": "<name>"`) and the plugin content. The content
+   names the plugin's own skills `<name>:<skill>`, always including the namespace prefix
+   `<name>`.
 2. Create `plugins/<name>/EVALUATION.md` starting with `State: candidate`, with the sections
    Goal and scope, Comparisons, Assessment and Decision.
 3. Add `[plugins.<name>]` with `state = "candidate"` to `plugins.toml`.
