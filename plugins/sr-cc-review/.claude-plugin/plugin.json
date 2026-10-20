@@ -1,0 +1,7 @@
+{
+  "name": "sr-cc-review",
+  "description": "Design review and cognitive complexity check on changed Python code before each commit. Python features that span several functions or modules.",
+  "author": { "name": "csggnn" },
+  "repository": "https://github.com/csggnn/simplicity-rules",
+  "license": "MIT"
+}

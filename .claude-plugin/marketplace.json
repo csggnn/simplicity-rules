@@ -12,6 +12,11 @@
       "name": "sr-v0",
       "source": "./plugins/sr-v0",
       "description": "Baseline with no skills, hooks or agents. Any task, any language."
+    },
+    {
+      "name": "sr-cc-review",
+      "source": "./plugins/sr-cc-review",
+      "description": "Design review and cognitive complexity check on changed Python code before each commit. Python features that span several functions or modules."
     }
   ]
 }
