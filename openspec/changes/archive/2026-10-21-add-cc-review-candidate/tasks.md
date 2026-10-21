@@ -38,7 +38,7 @@
 
 ## 3. Checks
 
-- [ ] 3.1 Run `uvx pre-commit run --all-files` and `openspec validate --all`. Verify both
+- [x] 3.1 Run `uvx pre-commit run --all-files` and `openspec validate --all`. Verify both
   pass, and CI passes on the pull request.
 
 ## Workflow follow-up
