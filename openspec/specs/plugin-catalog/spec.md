@@ -30,8 +30,8 @@ Exactly one plugin SHALL have the state `default`.
 - `archived`: deprecated and kept for reference. Not offered for installation.
 
 #### Scenario: Initial states
-- **WHEN** this change is applied
-- **THEN** sr-v0 is the only plugin, and its state is `default`
+- **WHEN** a plugin is added to the catalog
+- **THEN** its state is `candidate`, and the state of the default plugin is unchanged
 
 ### Requirement: The marketplace offers every plugin that is not archived
 Installing the repository's marketplace SHALL offer, by name, every plugin whose state is

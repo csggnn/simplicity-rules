@@ -4,3 +4,6 @@ default = "sr-v0"
 
 [plugins.sr-v0]
 state = "default"
+
+[plugins.sr-cc-review]
+state = "candidate"
