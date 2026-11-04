@@ -1,0 +1,48 @@
+name: OpenSpec regenerate
+
+# Regenerates the OpenSpec files on a Dependabot pull request that bumps the pinned
+# OpenSpec version, reruns CI on the new commit and enables auto-merge.
+on:
+  pull_request:
+    paths: [package.json, package-lock.json]
+
+permissions: {}
+
+jobs:
+  regenerate:
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
+      pull-requests: write
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      HEAD_REF: ${{ github.head_ref }}
+      PR_URL: ${{ github.event.pull_request.html_url }}
+    steps:
+      - name: Check out the pull request branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.head_ref }}
+          persist-credentials: false
+
+      - name: Regenerate OpenSpec files
+        run: |
+          npm ci --ignore-scripts --no-audit --no-fund
+          npx openspec update --force > /dev/null
+
+      - name: Commit, push and rerun CI
+        run: |
+          if [ -z "$(git status --porcelain -- .claude)" ]; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .claude
+          git commit -m "chore: regenerate OpenSpec files"
+          git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:${HEAD_REF}"
+          gh workflow run ci.yml --ref "$HEAD_REF"
+
+      - name: Enable auto-merge
+        run: gh pr merge "$PR_URL" --auto --squash
