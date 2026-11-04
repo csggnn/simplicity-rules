@@ -1,6 +1,6 @@
 {
   "private": true,
   "devDependencies": {
-    "@fission-ai/openspec": "1.14.3"
+    "@fission-ai/openspec": "1.15.0"
   }
 }
