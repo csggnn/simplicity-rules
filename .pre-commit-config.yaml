@@ -26,6 +26,7 @@ repos:
     rev: v1.31.1
     hooks:
       - id: zizmor
+  # exception: the plugin catalog check and its tests use only the Python standard library.
   - repo: local
     hooks:
       - id: check-plugins

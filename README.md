@@ -205,9 +205,9 @@ check the plugin catalog with `scripts/check-plugins.py` and run its tests in `t
 (`python3 -m unittest discover -s tests`). CI also checks that the files under `.claude/` match
 the output of `openspec update` at the version pinned in `package.json`.
 
-- Dependabot updates the GitHub Actions and the pinned OpenSpec version weekly, after a
-  7-day cooldown. On an OpenSpec bump, `.github/workflows/openspec-regenerate.yml` commits the
-  regenerated files, approves the CI runs of that commit and enables auto-merge.
+- Dependabot updates the GitHub Actions, the pre-commit hooks and the pinned OpenSpec version
+  weekly, after a 7-day cooldown. On an OpenSpec bump, `.github/workflows/openspec-regenerate.yml`
+  commits the regenerated files, approves the CI runs of that commit and enables auto-merge.
 - `.github/workflows/dependabot-automerge.yml` enables auto-merge on every Dependabot pull
   request without a major version update. It merges after the required checks pass.
 - CodeRabbit reviews pull requests (`.coderabbit.yaml`).
