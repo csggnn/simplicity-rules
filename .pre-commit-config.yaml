@@ -23,7 +23,7 @@ repos:
     hooks:
       - id: gitleaks
   - repo: https://github.com/zizmorcore/zizmor-pre-commit
-    rev: v1.31.1
+    rev: v1.32.0
     hooks:
       - id: zizmor
   # exception: the plugin catalog check and its tests use only the Python standard library.
